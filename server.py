@@ -25,5 +25,5 @@ def main():
 			print("connection part")
 		finally:
 			print('-'*20)
-			time.sleep(2)
+			time.sleep(900)
 	websocket.close()
