@@ -12,17 +12,17 @@ def main():
 			out.measure()
 			print("temp :",out.temperature())
 			mesg = ujson.dumps({'temp' : out.temperature()})
-			websocket.send(mesg)
-			resp = websocket.recv()
-			print("response : {}".format(resp))
-		except AssertionError:
-			print("connection issue")
-			websocket = uwebsockets.client.connect(uri)
-			print("Connecting to {}: and status is {}".format(uri,websocket.open))
 		except:
 			count += 1
 			print(count)
+		try:
+			websocket.send(mesg)
+			resp = websocket.recv()
+			print("response : {}".format(resp))
+		except Exception as e:
+			pinrt(e)
+			print("connection part")
 		finally:
 			print('-'*20)
-			time.sleep(20)
+			time.sleep(2)
 	websocket.close()
