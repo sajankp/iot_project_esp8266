@@ -5,21 +5,19 @@ def main():
 	uri = 'ws://35.244.13.244/ws/post'
 	websocket = uwebsockets.client.connect(uri)
 	print("Connecting to {}:".format(uri))
-
-	#mesg = ujson.dumps({'value' : 1})
-	#websocket.send(mesg)
-	#resp = websocket.recv()
-	#print(resp)
-
-	out = machine.Pin(16, machine.Pin.IN)
-
+	out = dht.DHT11(machine.Pin(12)) # d6 pin
+	count = 0
 	while True:
-		value = out.value()
-		print(value)
-		mesg = ujson.dumps({'value' : value})
-		websocket.send(mesg)
-		resp = websocket.recv()
-		print(resp)
-		time.sleep(10)
+		try:
+			out.measure()
+			print("temp :",out.temperature())
+			mesg = ujson.dumps({'temp' : out.temperature()})
+			websocket.send(mesg)
+			resp = websocket.recv()
+			print(resp)
+			time.sleep(60)
+		except:
+			count += 1
+			print(count)
 
 	websocket.close()
