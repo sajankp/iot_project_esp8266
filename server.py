@@ -3,6 +3,7 @@ import ujson, time, machine, dht
 
 def main():
 	uri = 'ws://35.244.13.244/ws/post'
+	# uri = 'ws://echo.websocket.org/'
 	websocket = uwebsockets.client.connect(uri)
 	print("Connecting to {}:".format(uri))
 	out = dht.DHT11(machine.Pin(12)) # d6 pin
@@ -20,7 +21,7 @@ def main():
 			resp = websocket.recv()
 			print("response : {}".format(resp))
 		except Exception as e:
-			pinrt(e)
+			print(e)
 			print("connection part")
 		finally:
 			print('-'*20)
