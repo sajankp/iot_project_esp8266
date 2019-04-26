@@ -23,7 +23,8 @@ def main():
 		except Exception as e:
 			print(e)
 			print("connection part")
+			websocket = uwebsockets.client.connect(uri)
 		finally:
 			print('-'*20)
-			time.sleep(900)
+			time.sleep(45)
 	websocket.close()
