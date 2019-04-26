@@ -8,12 +8,11 @@ def main():
 	# websocket = uwebsockets.client.connect(uri) #for websocket use
 	led = machine.Pin(16, machine.Pin.OUT)
 	print("Connecting to {}:".format(uri))
-	out = dht.DHT11(machine.Pin(12)) # d6 pin
-	t = 3000
+	out = dht.DHT11(machine.Pin(12)) # d6 p
 	count = 0
 	while True:
 		try:
-			t = 60
+			t = 3000
 			out.measure()
 			print("temp :",out.temperature())
 			mesg = ujson.dumps({'temp' : out.temperature()})
