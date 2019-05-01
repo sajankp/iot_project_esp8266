@@ -12,7 +12,7 @@ def main():
 	count = 0
 	while True:
 		try:
-			t = 3000
+			t = 1800
 			out.measure()
 			print("temp :",out.temperature())
 			mesg = ujson.dumps({'temp' : out.temperature()})
