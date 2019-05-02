@@ -3,7 +3,8 @@ import urequests
 import ujson, time, machine, dht
 
 def main():
-	uri = 'http://35.244.13.244/post'
+	#uri = 'http://35.244.13.244/post'
+	uri = 'http://192.168.225.201:8000/post'
 	# uri = 'ws://echo.websocket.org/' #for websocket testing
 	# websocket = uwebsockets.client.connect(uri) #for websocket use
 	led = machine.Pin(16, machine.Pin.OUT)
@@ -12,10 +13,10 @@ def main():
 	count = 0
 	while True:
 		try:
-			t = 1800
+			t = 75
 			out.measure()
-			print("temp :",out.temperature())
-			mesg = ujson.dumps({'temp' : out.temperature()})
+			mesg = ujson.dumps({'temp': out.temperature(), humidity: out.humidity()})
+			print(mesg)
 		except:
 			count += 1
 			print(count)
