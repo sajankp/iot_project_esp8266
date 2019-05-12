@@ -4,22 +4,23 @@ import ujson, time, machine, dht
 
 def main():
 	uri = 'http://35.244.13.244/post'
-	#uri = 'http://192.168.225.201:8000/post'
+	# uri = 'http://192.168.225.201:8000/post'
 	# uri = 'ws://echo.websocket.org/' #for websocket testing
 	# websocket = uwebsockets.client.connect(uri) #for websocket use
 	led = machine.Pin(16, machine.Pin.OUT)
 	print("Connecting to {}:".format(uri))
 	out = dht.DHT11(machine.Pin(12)) # d6 p
-	count = 0
 	while True:
 		try:
 			t = 900
 			out.measure()
-			mesg = ujson.dumps({'temp': out.temperature(), 'humidity': out.humidity()})
+			ERROR_IN_MEASUREMENT = False
+			mesg = ujson.dumps({'temp': out.temperature(), 'humidity': out.humidity(), 'ERROR_IN_MEASUREMENT': ERROR_IN_MEASUREMENT })
 			print(mesg)
 		except:
-			count += 1
-			print(count)
+			ERROR_IN_MEASUREMENT = True
+			mesg = ujson.dumps({'temp': out.temperature(), 'humidity': out.humidity(), 'ERROR_IN_MEASUREMENT': ERROR_IN_MEASUREMENT})
+			print(mesg)
 		try:
 			req = urequests.post(uri,data = mesg)
 			resp = req.text
