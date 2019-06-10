@@ -10,21 +10,27 @@ def main():
 	led = machine.Pin(16, machine.Pin.OUT)
 	print("Connecting to {}:".format(uri))
 	out = dht.DHT11(machine.Pin(12)) # d6 p
+	FIRST = True
 	while True:
 		try:
 			t = 900
 			out.measure()
 			ERROR_IN_MEASUREMENT = False
-			mesg = ujson.dumps({'temp': out.temperature(), 'humidity': out.humidity(), 'ERROR_IN_MEASUREMENT': ERROR_IN_MEASUREMENT })
+			mesg = ujson.dumps({'temp': out.temperature(), 'humidity': out.humidity(), 'ERROR_IN_MEASUREMENT': ERROR_IN_MEASUREMENT, 'FIRST': FIRST })
 			print(mesg)
 		except:
 			ERROR_IN_MEASUREMENT = True
-			mesg = ujson.dumps({'temp': out.temperature(), 'humidity': out.humidity(), 'ERROR_IN_MEASUREMENT': ERROR_IN_MEASUREMENT})
-			print(mesg)
+			mesg = ujson.dumps({'temp': out.temperature(), 'humidity': out.humidity(), 'ERROR_IN_MEASUREMENT': ERROR_IN_MEASUREMENT, 'FIRST': FIRST })
+			print("error",mesg)
 		try:
 			req = urequests.post(uri,data = mesg)
-			resp = req.text
+			req = ujson.loads(req.content)
+			resp = req['message']
 			print("response : {}".format(resp))
+			if FIRST == True :
+				print("next reading will be taken in {} seconds".format(req['time']))
+				t = req['time']
+				FIRST = False
 		except Exception as e:
 			print(e)
 			print("Issue with Connecting to server")
